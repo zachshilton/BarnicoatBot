@@ -1,8 +1,9 @@
 import { logger } from '../../utils/logger.js';
 import config from '../../config.js';
 import { getRoleIdsForPackageSlug } from './roleMapping.js';
+import { reportAction } from './actionReporter.js';
 
-export async function grantRolesForMember(client, { discordUserId, packageSlug }) {
+export async function grantRolesForMember(client, { discordUserId, packageSlug }, source = 'instant') {
   const guild = client.guilds.cache.get(config.subscriptionSync.guildId);
   if (!guild) return { ok: false, reason: 'guild_not_found' };
 
@@ -22,10 +23,15 @@ export async function grantRolesForMember(client, { discordUserId, packageSlug }
       logger.warn(`Failed to grant role ${roleId} to ${discordUserId}:`, error.message);
     }
   }
+
+  if (grantedRoleIds.length > 0) {
+    await reportAction({ discordUserId, packageSlug, action: 'grant', roleIds: grantedRoleIds, source });
+  }
+
   return { ok: true, grantedRoleIds };
 }
 
-export async function revokeAllManagedRoles(client, discordUserId, allManagedRoleIds) {
+export async function revokeAllManagedRoles(client, discordUserId, allManagedRoleIds, packageSlug, source = 'reconcile') {
   const guild = client.guilds.cache.get(config.subscriptionSync.guildId);
   if (!guild) return { ok: false, reason: 'guild_not_found' };
 
@@ -42,5 +48,10 @@ export async function revokeAllManagedRoles(client, discordUserId, allManagedRol
       logger.warn(`Failed to revoke role ${roleId} from ${discordUserId}:`, error.message);
     }
   }
+
+  if (revokedRoleIds.length > 0) {
+    await reportAction({ discordUserId, packageSlug, action: 'revoke', roleIds: revokedRoleIds, source });
+  }
+
   return { ok: true, revokedRoleIds };
 }

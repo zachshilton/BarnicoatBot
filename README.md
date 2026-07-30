@@ -9,6 +9,8 @@ A small, single-purpose Discord bot: it keeps Discord roles in sync with subscri
 
 Both directions are authenticated with independent shared-secret Bearer keys - this bot never has direct database access to bb-onboarding-automation, only this narrow API.
 
+This bot has no database of its own, so every role it actually grants or revokes (not every check - only real changes) is also reported back to bb-onboarding-automation's `POST /internal/discord-actions`, which is what powers that dashboard's "Discord Bot" activity log.
+
 ## Role mapping
 
 - **Inner Circle** -> its own role only.

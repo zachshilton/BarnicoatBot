@@ -16,6 +16,10 @@ const subscriptionSync = {
   ),
   guildId: process.env.GUILD_ID,
   entitlementsApiUrl: process.env.ENTITLEMENTS_API_URL,
+  // Same host as ENTITLEMENTS_API_URL, different path - reported actions feed the admin activity log.
+  discordActionsApiUrl: process.env.ENTITLEMENTS_API_URL
+    ? new URL('/internal/discord-actions', process.env.ENTITLEMENTS_API_URL).toString()
+    : undefined,
   entitlementsApiKey: process.env.ENTITLEMENTS_API_KEY,
   grantApiKey: process.env.SUBSCRIPTION_GRANT_API_KEY,
   cronPattern: process.env.SUBSCRIPTION_SYNC_CRON || '*/15 * * * *',

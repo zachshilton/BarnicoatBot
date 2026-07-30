@@ -32,7 +32,7 @@ function buildServer() {
       return res.status(400).json({ error: 'discordUserId and packageSlug are required' });
     }
 
-    const result = await grantRolesForMember(client, { discordUserId, packageSlug });
+    const result = await grantRolesForMember(client, { discordUserId, packageSlug }, 'instant');
 
     if (!result.ok) {
       if (result.reason === 'unknown_package_slug') {

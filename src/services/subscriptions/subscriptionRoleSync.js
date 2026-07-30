@@ -42,8 +42,8 @@ export async function reconcileSubscriptionRoles(client) {
     summary.entitlementsProcessed += 1;
     try {
       const result = entitlement.active
-        ? await grantRolesForMember(client, entitlement)
-        : await revokeAllManagedRoles(client, entitlement.discordUserId, allManagedRoleIds);
+        ? await grantRolesForMember(client, entitlement, 'reconcile')
+        : await revokeAllManagedRoles(client, entitlement.discordUserId, allManagedRoleIds, entitlement.packageSlug, 'reconcile');
 
       if (result.ok) {
         summary.rolesGranted += result.grantedRoleIds?.length || 0;
