@@ -14,9 +14,11 @@ This bot has no database of its own, so every role it actually grants or revokes
 ## Role mapping
 
 - **Inner Circle** -> its own role only.
-- **Authority / Motion / Ignite** -> each their own role, plus the shared **Deluxe Member** role.
+- **Social Media Success Program** -> its own role, plus the shared **Deluxe Member** role.
 
-Configured via the `ROLE_ID_*` env vars - see `.env.example`.
+Configured via the `ROLE_ID_*` env vars - see `.env.example`. Slugs must match what bb-onboarding-automation reports in `/internal/entitlements`, or `grantRolesForMember` rejects the package as `unknown_package_slug` and no roles are granted.
+
+**Motion** and **Ignite** are retired packages kept in the map on purpose. The map is also the source of `getAllManagedRoleIds()`, which is the set reconciliation strips from anyone no longer active - remove them and lapsed members keep those roles forever.
 
 ## Setup
 
